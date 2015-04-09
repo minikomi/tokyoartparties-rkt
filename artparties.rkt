@@ -75,6 +75,7 @@
       (if (empty? v)
           ""
           (last v))))
+
   (event title day area address start finish description link image))
 
 (define (layout-event ev)
