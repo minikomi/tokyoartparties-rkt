@@ -8,12 +8,14 @@ body {
   max-width: 680px; margin: 0 auto;
   padding: 10px;
 }
+
 /* Copy & Lists */
 p {
   line-height: 1.5rem;
   margin-top: 0.5rem;
   text-align: justify;
   margin-bottom: 0;
+  margin: 20px;
 }
 ul,
 ol {
@@ -49,10 +51,6 @@ h6 {
   margin-bottom: 0;
   line-height: 1.5rem;
 }
-.day div {
-  border-top: 1px dotted #ccc;
-  margin-top: 1rem;
-}
 h1 {
   font-size: 35px;
   line-height: 28px;
@@ -70,9 +68,11 @@ h3 {
   color: #444;
   margin-top: 20px;
   text-align: left;
+  border-bottom: 1px dotted #aaa;
 }
+
 h4 {
-  margin-top: 10px;
+  margin-top: 30px;
   font-size: 1rem; 
   color: #e2e;
 }
@@ -109,6 +109,10 @@ code {
 }
 img {
   display: block;
-  margin: 10px auto;
+  margin: 20px auto 0 auto;
   width: 300px;
+}
+.area {
+    background: #f2f2f2;
+    padding: 5px;
 }

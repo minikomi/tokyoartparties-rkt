@@ -11,6 +11,7 @@
   (title
    day
    area
+   venue-name
    address
    start
    finish
@@ -40,6 +41,12 @@
           ""
           (first v))))
 
+  (define venue-name
+    (let ([v ((sxpath `(Venue Name *text*)) ev)])
+      (if (empty? v)
+          ""
+          (first v))))
+  
   (define address
     (let ([v ((sxpath `(Venue Address *text*)) ev)])
       (if (empty? v)
@@ -76,18 +83,17 @@
           ""
           (last v))))
 
-  (event title day area address start finish description link image))
+  (event title day area venue-name address start finish description link image))
 
 (define (layout-event ev)
   `(div
-    (h3 ,(event-title ev))
-    (h4 ,(string-append (event-start ev) " - " (event-finish ev)))
-    (h5 ,(event-area ev))
-    (h6 ((class "address")) ,(event-address ev))
-    (p ,(when (not (eq? "" (event-image ev)))
-          `(img [(src ,(event-image ev))]))
-       ,(event-description ev))
-    ))
+    (h4 ,(event-title ev))
+    (h5 ,(string-append (event-start ev) " - " (event-finish ev)))
+    (h6 ((class "address")) ,(event-venue-name ev))
+    (h7 ((class "address")) ,(event-address ev))
+    ,(when (not (eq? "" (event-image ev)))
+       `(img [(src ,(event-image ev))]))
+    (p ,(event-description ev))))
 
 (define (handler req)
 
@@ -107,8 +113,11 @@
     (for/fold ([days (hash)])
               ([ev party-events])
       (hash-update days (event-day ev)
-                   (λ (evs) (cons ev evs))
-                   (list))))
+                   (λ (area)
+                     (hash-update area (event-area ev)
+                                  (λ (area-evs) (cons ev area-evs)) 
+                                  (list)))
+                   (hash))))
 
   (define cd (current-date))
 
@@ -136,10 +145,12 @@
          (λ (day)
            `(div ([class "day"])
              (h2 ,day)
-             ,@(map (lambda (ev) (layout-event ev))
-                    (sort (hash-ref days-hash day)
-                          (λ (ev1 ev2) (string<? (event-area ev1) (event-area ev2)))
-                          ))))
+             ,@(let ([single-day-hash (hash-ref days-hash day)])
+                 (map (λ (area)
+                        `(div ([class "area"])
+                          (h3 ,area)
+                          ,@(map layout-event (hash-ref single-day-hash area))))
+                      (sort (hash-keys single-day-hash) string<?)))))
          days-later-than-today-in-order)))))
 
 (serve/servlet
