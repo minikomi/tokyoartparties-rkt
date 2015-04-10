@@ -11,11 +11,12 @@ body {
 
 /* Copy & Lists */
 p {
-  line-height: 1.5rem;
   margin-top: 0.5rem;
   text-align: justify;
   margin-bottom: 0;
   margin: 20px;
+  line-height: 1.5em;
+  font-size: 18px;
 }
 a {
   color: #44a;
@@ -52,9 +53,12 @@ h5,
 h6 {
   /* Change heading typefaces here */
   font-family: sans-serif;
-  margin-top: 1.5rem;
+  margin-top: 0rem;
   margin-bottom: 0;
   line-height: 1.5rem;
+}
+h7 {
+  display: block;
 }
 h1 {
   font-size: 35px;
@@ -70,24 +74,26 @@ h2 {
 }
 h3 {
   font-size: 22px;
+  clear: both;
   color: #444;
-  margin-top: 20px;
+  margin-top: 10px;
   text-align: left;
   border-bottom: 1px dotted #aaa;
+  color: #e2e;
 }
 
 h4 {
-  margin-top: 30px;
-  font-size: 1rem; 
-  color: #e2e;
+  margin-top: 10px;
+  font-size: 1rem;
+
 }
 h5 {
-  margin-top: 10px;
-  font-size: 0.8rem; 
+  margin-top: 0px;
+  font-size: 0.8rem;
   color: #22a;
 }
 h6 {
-  margin-top: 10px; font-size: 0.6rem; color: #222; line-height: 1.2rem;
+  margin-top: 0px; font-size: 0.6rem; color: #222; line-height: 1.2rem;
 }
 /* Tables */
 table {
@@ -114,10 +120,16 @@ code {
 }
 img {
   display: block;
-  margin: 20px auto 0 auto;
-  width: 300px;
+  margin: 20px;
+  float: left;
+  clear: left;
+  width: 110px;
 }
 .area {
+  clear: both;
+  overflow:hidden;
+  position: relative;
+
     background: #f2f2f2;
     padding: 5px;
 }
