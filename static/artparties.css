@@ -17,6 +17,11 @@ p {
   margin-bottom: 0;
   margin: 20px;
 }
+a {
+  color: #44a;
+  font-size: 16px;
+}
+
 ul,
 ol {
   margin-top: 1.5rem;

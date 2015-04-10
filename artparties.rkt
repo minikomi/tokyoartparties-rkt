@@ -104,12 +104,12 @@
     (h4 ,(event-title ev))
     (h5 ,(string-append (event-start ev) " - " (event-finish ev)))
     (h6 ,(event-venue-name ev))
-    (h7 (a ([href ,(~a "http://maps.google.com/?q=" 
+    (h7 (a ([class "address"]
+            [target "_blank"]
+            [href ,(~a "http://maps.google.com/?q=" 
                        (event-venue-name ev)
                        " "
-                       (event-address ev))
-             class "address"
-             target "_blank"]) 
+                       (event-address ev))]) 
            ,(event-address ev)))
     ,(when (not (eq? "" (event-image ev)))
        `(img [(src ,(event-image ev))]))
