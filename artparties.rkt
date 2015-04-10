@@ -13,6 +13,8 @@
    area
    venue-name
    address
+   lat
+   long
    start
    finish
    description
@@ -53,6 +55,18 @@
           ""
           (first v))))
 
+  (define lat
+    (let ([v ((sxpath `(Latitude *text*)) ev)])
+      (if (empty? v)
+          ""
+          (first v))))
+  
+  (define long
+    (let ([v ((sxpath `(Longitude *text*)) ev)])
+      (if (empty? v)
+          ""
+          (first v))))
+  
   (define start
     (let ([v ((sxpath `(Party @ start *text*)) ev)])
       (if (empty? v)
@@ -83,14 +97,20 @@
           ""
           (last v))))
 
-  (event title day area venue-name address start finish description link image))
+  (event title day area venue-name address lat long start finish description link image))
 
 (define (layout-event ev)
   `(div
     (h4 ,(event-title ev))
     (h5 ,(string-append (event-start ev) " - " (event-finish ev)))
-    (h6 ((class "address")) ,(event-venue-name ev))
-    (h7 ((class "address")) ,(event-address ev))
+    (h6 ,(event-venue-name ev))
+    (h7 (a ([href ,(~a "http://maps.google.com/?q=" 
+                       (event-venue-name ev)
+                       " "
+                       (event-address ev))
+             class "address"
+             target "_blank"]) 
+           ,(event-address ev)))
     ,(when (not (eq? "" (event-image ev)))
        `(img [(src ,(event-image ev))]))
     (p ,(event-description ev))))
