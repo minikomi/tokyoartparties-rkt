@@ -75,16 +75,17 @@ h2 {
 h3 {
   font-size: 22px;
   clear: both;
-  color: #444;
+  color: #CD3232;
   margin-top: 10px;
   text-align: left;
   border-bottom: 1px dotted #aaa;
-  color: #e2e;
+  color: 
 }
 
 h4 {
   margin-top: 10px;
   font-size: 1rem;
+  color: #1F3FDD;
 
 }
 h5 {
@@ -126,10 +127,10 @@ img {
   width: 110px;
 }
 .area {
+  margin-top: 10px;
   clear: both;
   overflow:hidden;
   position: relative;
-
-    background: #f2f2f2;
-    padding: 5px;
+  background: #f2f2f2;
+  padding: 10px;
 }

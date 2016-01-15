@@ -1,10 +1,10 @@
 #lang racket
 
 (require sxml
-         racket/date
          net/http-client
          web-server/servlet
          web-server/servlet-env
+         srfi/19
          )
 
 (define-struct event
@@ -22,6 +22,9 @@
    image
    ) #:transparent)
 
+(define months
+  '("Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
+
 (define xmlurl "http://www.tokyoartbeat.com/list/event_type_misc_party.en.xml")
 
 (define (process-event ev)
@@ -35,7 +38,7 @@
     (let ([v ((sxpath `(Party @ date *text*)) ev)])
       (if (empty? v)
           ""
-          (first v))))
+          (string->date (first v) "~Y-~m-~d"))))
 
   (define area
     (let ([v ((sxpath `(Venue Area *text*)) ev)])
@@ -48,7 +51,7 @@
       (if (empty? v)
           ""
           (first v))))
-  
+
   (define address
     (let ([v ((sxpath `(Venue Address *text*)) ev)])
       (if (empty? v)
@@ -60,13 +63,13 @@
       (if (empty? v)
           ""
           (first v))))
-  
+
   (define long
     (let ([v ((sxpath `(Longitude *text*)) ev)])
       (if (empty? v)
           ""
           (first v))))
-  
+
   (define start
     (let ([v ((sxpath `(Party @ start *text*)) ev)])
       (if (empty? v)
@@ -106,10 +109,10 @@
     (h6 ,(event-venue-name ev))
     (h7 (a ([class "address"]
             [target "_blank"]
-            [href ,(~a "http://maps.google.com/?q=" 
+            [href ,(~a "http://maps.google.com/?q="
                        (event-venue-name ev)
                        " "
-                       (event-address ev))]) 
+                       (event-address ev))])
            ,(event-address ev)))
     ,(when (not (eq? "" (event-image ev)))
        `(img [(src ,(event-image ev))]))
@@ -135,25 +138,18 @@
       (hash-update days (event-day ev)
                    (λ (area)
                      (hash-update area (event-area ev)
-                                  (λ (area-evs) (cons ev area-evs)) 
+                                  (λ (area-evs) (cons ev area-evs))
                                   (list)))
                    (hash))))
 
   (define cd (current-date))
 
-  (define today (~a
-                 (date-year cd)
-                 "-"
-                 (~r (date-month cd) #:min-width 2 #:pad-string "0")
-                 "-"
-                 (~r (date-day cd) #:min-width 2 #:pad-string "0")))
-
   (define days-later-than-today-in-order
-    (sort 
-     (filter 
-      (λ (day) (string<=? today day)) 
-      (hash-keys days-hash)) 
-     string<?))
+    (sort
+     (filter
+      (λ (day) (time<=? (date->time-utc cd) (date->time-utc day)))
+      (hash-keys days-hash))
+     (λ (a b) (time<? (date->time-utc a) (date->time-utc b)))))
 
   (response/xexpr
    `(html (head
@@ -164,7 +160,7 @@
       ,@(map
          (λ (day)
            `(div ([class "day"])
-             (h2 ,day)
+             (h2 ,(date->string day "~a, ~d ~b"))
              ,@(let ([single-day-hash (hash-ref days-hash day)])
                  (map (λ (area)
                         `(div ([class "area"])
