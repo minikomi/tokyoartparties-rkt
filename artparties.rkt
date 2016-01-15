@@ -144,7 +144,9 @@
   (define days-later-than-today-in-order
     (sort
      (filter
-      (λ (day) (time<=? (date->time-utc cd) (date->time-utc day)))
+      (λ (day) (and (<= (date-year cd) (date-year day))
+                    (<= (date-month cd) (date-month day))
+                    (<= (date-day cd) (date-day day))))
       (hash-keys days-hash))
      (λ (a b) (time<? (date->time-utc a) (date->time-utc b)))))
 
