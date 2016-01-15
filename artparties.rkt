@@ -22,9 +22,6 @@
    image
    ) #:transparent)
 
-(define months
-  '("Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
-
 (define xmlurl "http://www.tokyoartbeat.com/list/event_type_misc_party.en.xml")
 
 (define (process-event ev)
